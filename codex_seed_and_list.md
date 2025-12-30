@@ -1,7 +1,5 @@
 # Codex Task: Seed -> List MVP
 
-```text
-
 M1: Seedデータ投入（野毛20店）→ 一覧で見える
 
 **最初の“快感ポイント”**をここに置こう。
