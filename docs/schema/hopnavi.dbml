@@ -1,0 +1,176 @@
+erDiagram
+  AREAS ||--o{ VENUES : has
+  CATEGORIES ||--o{ VENUE_CATEGORIES : maps
+  VENUES ||--o{ VENUE_CATEGORIES : tagged
+  VENUES ||--o{ OPENING_HOURS : opens
+  VENUES ||--o{ HAPPY_HOURS : happy_hour
+  VENUES ||--o{ OFFERS : has
+  VENUES ||--o| NIGHTLIFE_PRICING : nightlife
+  AREAS ||--o{ ROUTES : planned_in
+  ROUTES ||--o{ ROUTE_STOPS : contains
+  VENUES ||--o{ ROUTE_STOPS : visited
+  VENUES ||--o| FAVORITES : favorited
+  ROUTES ||--o{ EVENT_QUEUE : emits
+  VENUES ||--o{ EVENT_QUEUE : emits
+
+  %% Optional (use SharedPreferences instead if you want)
+  %% USER_PREFERENCES has no relations
+
+  AREAS {
+    TEXT id PK
+    TEXT name_ja
+    TEXT name_en
+    REAL center_lat
+    REAL center_lng
+    REAL default_zoom
+    INT  is_active
+    INT  created_at
+    INT  updated_at
+  }
+
+  CATEGORIES {
+    TEXT id PK
+    TEXT label_ja
+    TEXT label_en
+    INT  is_nightlife
+    INT  sort_order
+    INT  is_active
+  }
+
+  VENUES {
+    TEXT id PK
+    TEXT area_id FK
+    TEXT name_ja
+    TEXT name_en
+    REAL lat
+    REAL lng
+    TEXT address_ja
+    TEXT address_en
+    TEXT phone
+    TEXT website_url
+
+    TEXT notes_ja
+    TEXT notes_en
+
+    TEXT seating_type
+    TEXT smoking_policy
+    TEXT payment_policy
+    INT  cover_charge_yen
+    TEXT otoshi
+    TEXT english_menu
+
+    INT  last_verified_at
+    TEXT verified_method
+
+    INT  is_active
+    INT  created_at
+    INT  updated_at
+  }
+
+  VENUE_CATEGORIES {
+    TEXT venue_id FK
+    TEXT category_id FK
+  }
+
+  OPENING_HOURS {
+    TEXT id PK
+    TEXT venue_id FK
+    INT  day_of_week
+    TEXT open_time
+    TEXT close_time
+    INT  crosses_midnight
+    TEXT note_ja
+    TEXT note_en
+    INT  is_active
+  }
+
+  HAPPY_HOURS {
+    TEXT id PK
+    TEXT venue_id FK
+    INT  day_of_week
+    TEXT start_time
+    TEXT end_time
+    TEXT deal_ja
+    TEXT deal_en
+    TEXT conditions_ja
+    TEXT conditions_en
+    INT  last_verified_at
+    TEXT verified_method
+    INT  is_active
+  }
+
+  OFFERS {
+    TEXT id PK
+    TEXT venue_id FK
+    TEXT type
+    TEXT title_ja
+    TEXT title_en
+    TEXT condition_ja
+    TEXT condition_en
+    TEXT details_ja
+    TEXT details_en
+    INT  valid_from
+    INT  valid_to
+    INT  is_active
+    INT  last_verified_at
+    TEXT redeem_mode
+    TEXT redeem_hint_ja
+    TEXT redeem_hint_en
+  }
+
+  NIGHTLIFE_PRICING {
+    TEXT venue_id PK, FK
+    INT  first_set_minutes
+    INT  first_set_price_yen
+    INT  cast_drink_price_yen
+    TEXT additional_fees_note_ja
+    TEXT additional_fees_note_en
+    INT  last_verified_at
+    TEXT verified_method
+  }
+
+  ROUTES {
+    TEXT id PK
+    TEXT area_id FK
+    INT  created_at
+    REAL start_lat
+    REAL start_lng
+    INT  total_minutes
+    INT  budget_yen
+    TEXT mood
+    INT  nightlife_enabled
+    TEXT status
+    TEXT constraints_json
+  }
+
+  ROUTE_STOPS {
+    TEXT id PK
+    TEXT route_id FK
+    INT  stop_order
+    TEXT venue_id FK
+    INT  stay_minutes
+    INT  walk_minutes_from_prev
+    INT  planned_arrival_at
+    INT  planned_departure_at
+  }
+
+  FAVORITES {
+    TEXT venue_id PK, FK
+    INT  created_at
+  }
+
+  EVENT_QUEUE {
+    TEXT id PK
+    INT  created_at
+    TEXT event_type
+    TEXT venue_id FK
+    TEXT route_id FK
+    TEXT payload_json
+    INT  synced
+  }
+
+  USER_PREFERENCES {
+    TEXT key PK
+    TEXT value
+    INT  updated_at
+  }
