@@ -4,15 +4,18 @@ erDiagram
   CATEGORIES ||--o{ VENUE_CATEGORIES : maps
   VENUES ||--o{ VENUE_CATEGORIES : tagged
   VENUES ||--o{ OPENING_HOURS : opens
-  VENUES ||--o{ HAPPY_HOURS : offers
+  VENUES ||--o{ HAPPY_HOURS : happy_hour
   VENUES ||--o{ OFFERS : has
-  VENUES ||--o| NIGHTLIFE_PRICING : priced
-  VENUES ||--o{ VENUE_SUBSCRIPTIONS : subscribes
+  VENUES ||--o| NIGHTLIFE_PRICING : nightlife
   AREAS ||--o{ ROUTES : planned_in
   ROUTES ||--o{ ROUTE_STOPS : contains
   VENUES ||--o{ ROUTE_STOPS : visited
+  VENUES ||--o| FAVORITES : favorited
   ROUTES ||--o{ EVENT_QUEUE : emits
   VENUES ||--o{ EVENT_QUEUE : emits
+
+  %% Optional (use SharedPreferences instead if you want)
+  %% USER_PREFERENCES has no relations
 
   AREAS {
     TEXT id PK
@@ -46,16 +49,20 @@ erDiagram
     TEXT address_en
     TEXT phone
     TEXT website_url
+
+    TEXT notes_ja
+    TEXT notes_en
+
     TEXT seating_type
     TEXT smoking_policy
     TEXT payment_policy
     INT  cover_charge_yen
     TEXT otoshi
     TEXT english_menu
-    TEXT notes_ja
-    TEXT notes_en
+
     INT  last_verified_at
     TEXT verified_method
+
     INT  is_active
     INT  created_at
     INT  updated_at
@@ -123,17 +130,6 @@ erDiagram
     TEXT verified_method
   }
 
-  VENUE_SUBSCRIPTIONS {
-    TEXT id PK
-    TEXT venue_id FK
-    TEXT status
-    TEXT plan
-    INT  monthly_fee_yen
-    INT  started_at
-    INT  ended_at
-    TEXT note
-  }
-
   ROUTES {
     TEXT id PK
     TEXT area_id FK
@@ -145,6 +141,7 @@ erDiagram
     TEXT mood
     INT  nightlife_enabled
     TEXT status
+    TEXT constraints_json
   }
 
   ROUTE_STOPS {
@@ -158,6 +155,11 @@ erDiagram
     INT  planned_departure_at
   }
 
+  FAVORITES {
+    TEXT venue_id PK, FK
+    INT  created_at
+  }
+
   EVENT_QUEUE {
     TEXT id PK
     INT  created_at
@@ -166,4 +168,10 @@ erDiagram
     TEXT route_id FK
     TEXT payload_json
     INT  synced
+  }
+
+  USER_PREFERENCES {
+    TEXT key PK
+    TEXT value
+    INT  updated_at
   }
